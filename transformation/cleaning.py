@@ -12,9 +12,7 @@ os.makedirs(output_dir, exist_ok=True)
 
 weather_results = []
 
-
-with open(json_path, "r") as file:
-    cities_weather = json.load(file)
+cities_weather = pd.read_json(json_path)
 
 
 for city_name, data in cities_weather.items():
@@ -81,6 +79,13 @@ df = df.merge(
     on="city",
     how="left"
 )
+
+missing_data = df['latitude'].isnull().sum() + df['longitude'].isnull().sum()
+
+print(f"Missing data in latitude and longitude: {missing_data}")
+
+if missing_data > 0:
+    df = df.dropna(subset=['latitude', 'longitude'])
 
 df.to_json(
     output_path,
