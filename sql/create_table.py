@@ -54,10 +54,10 @@ for index, row in weather_df.iterrows():
         wind_gusts=row['wind_gusts'],
         precipitation=row['precipitation'],
         precipitation_probability=row['precipitation_probability'],
-        temperature_category=row['Temperature_Category'],
-        wind_category=row['Wind_Category'],
-        rain_category=row['Rain_Category'],
-        risk_score=row['Risk_Score'],
+        temperature_category=row['temperature_category'],
+        wind_category=row['wind_category'],
+        rain_category=row['rain_category'],
+        risk_score=row['risk_score'],
 
         
     )
