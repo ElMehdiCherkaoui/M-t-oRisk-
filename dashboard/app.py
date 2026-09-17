@@ -198,7 +198,7 @@ plt.legend().remove()
 st.pyplot(fig)
 
 
-st.subheader("risk map by city")
+st.subheader("cities with risk score >= 1")
 
 danger_cities = df_filtered[df_filtered['risk_score'] >= 1]
 
