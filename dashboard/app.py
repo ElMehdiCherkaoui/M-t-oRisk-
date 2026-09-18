@@ -7,6 +7,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import plotly.express as px
 
 DATABASE_URL = 'postgresql://postgres:postgres@meteorisK-db:5432/postgres'
 
@@ -207,4 +208,24 @@ st.subheader("cities with risk score >= 1")
 
 danger_cities = df_filtered[df_filtered['risk_score'] >= 1]
 
-st.map(danger_cities[['latitude', 'longitude']])
+if danger_cities.any():
+    fig = px.scatter_mapbox(
+        danger_cities,
+        lat='latitude',
+        lon='longitude',
+        size='risk_score',
+        color='risk_score',
+        color_continuous_scale="Reds",
+        hover_name='city',
+        opacity=0.7,
+        zoom=5,
+        labels={'risk_score': 'Risk Score'},
+    )
+
+    fig.update_layout(
+        mapbox_style="open-street-map",
+    )
+
+    st.plotly_chart(fig)
+else:
+    st.info("No cities match the risk criteria.")
