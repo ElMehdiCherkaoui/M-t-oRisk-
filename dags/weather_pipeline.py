@@ -1,16 +1,23 @@
 from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonOperator
+import logging
 
 from transformation.cleaning import transform_weather_data
 from transformation.gold_transformation import transform_weather_data_gold
 from sql.create_table import load_data_to_postgres
 from extraction.extract_weather import extract_weather_data
+
+
+def task_failure_allert(context):
+    logging.error(f'task {context["task_instance"].task_id} has been failed.')
+    
     
 default_args = {
     'owner': 'airflow',
     'retries': 5,
     'retry_delay': 300,
+    'on_failure_callback': task_failure_allert
 }
 
 with DAG(
