@@ -7,14 +7,15 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-DATABASE_URL = 'postgresql://postgres:postgres@db:5432/mydatabase'
+
+DATABASE_URL = 'postgresql://postgres:postgres@meteorisK-db:5432/postgres'
 
 
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 session = Session()
-Base = declarative_base()
 
+Base = declarative_base()
 
 class WeatherRiskGold(Base):
     __tablename__ = 'weather_risk_gold'
@@ -35,8 +36,12 @@ class WeatherRiskGold(Base):
     temperature_category = Column(String, nullable=False)
     wind_category = Column(String, nullable=False)
     rain_category = Column(String, nullable=False)
+
+    
+    
     
     risk_score = Column(Integer, nullable=False)
+        
 
 try:
     df = session.query(WeatherRiskGold).all()
