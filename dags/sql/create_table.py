@@ -1,6 +1,20 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date, Float
 from sqlalchemy.orm import declarative_base, sessionmaker
 import pandas as pd
+
+
+def run_data_quality_checks(df):
+    if df.empty:
+        raise ValueError("dataframe is empty")
+    elif df.isnull().any():
+        raise ValueError("dataframe contains null values")
+    elif df[df['temp_max'] < df['temp_min']].any():
+        raise ValueError("dataframe invalid: temp_max is less than temp_min")
+
+
+
+
+
 def load_data_to_postgres():
     try:
         engine = create_engine('postgresql://postgres:postgres@meteorisK-db:5432/postgres')
@@ -39,6 +53,7 @@ def load_data_to_postgres():
 
     json_path = "/opt/airflow/dags/gold/weather/Weather_final.json"
     weather_df = pd.read_json(json_path)
+    run_data_quality_checks(weather_df)
 
     session = SessionLocal()    
 
